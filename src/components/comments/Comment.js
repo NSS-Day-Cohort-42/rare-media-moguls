@@ -1,8 +1,8 @@
-import React, { useContext, useRef } from "react"
+import React, { useContext, useEffect, useRef } from "react"
 import { CommentContext } from "./CommentProvider"
 
 export const Comment = (props) => {
-    const {deleteComment} = useContext(CommentContext)
+    const {deleteComment, getComments, comments} = useContext(CommentContext)
     const deleteCommentDialog = useRef(null)
 
     const handleDate = (date) => {
@@ -38,8 +38,8 @@ export const Comment = (props) => {
                 <button className="button--closeDialog btn" onClick={e => deleteCommentDialog.current.close()}>Close</button>
                 <button className="button--deleteDialog btn"
                     onClick={e => {
-                        deleteComment(props.comment.post_id)
-                        props.history.push(`/comments/${props.comment.post_id}`)
+                        deleteComment(props.comment.id).then(deleteCommentDialog.current.close()).then(window.location.reload())
+                        
                     }}>Delete</button>
         </dialog>
 

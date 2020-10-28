@@ -7,7 +7,8 @@ export const CommentForm = (props) => {
 
     const [comment, setComment] = useState({})
 
-    const editMode = props.match.params.hasOwnProperty("commentId")
+    const editMode = props.match.params.hasOwnProperty("postId")
+    console.log(props)
 
     const handleControlledInputChange = (eve) => {
         const newComment = Object.assign({}, comment)

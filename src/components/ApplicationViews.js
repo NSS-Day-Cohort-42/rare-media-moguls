@@ -91,18 +91,20 @@ export const ApplicationViews = (props) => {
                         <TagsList {...props} />}/>
                 </TagProvider>
 
-                <CommentProvider>
-                    <PostProvider>
-                        <Route exact path="/comments/:postId(\d+)" render={props =>
-                            <CommentsListByPost {...props} />}
-                        />
-                    <Route exact path="/new_comment/:postId(\d+)" render={props =>
-                            <CommentForm {...props} />}/>
-                    <Route exact path="/comments/edit/:commentId(\d+)" render={
-                            props => <PostForm {...props} />
-                        } />
-                    </PostProvider>
-                </CommentProvider>
+                <CategoryProvider>
+                    <CommentProvider>
+                        <PostProvider>
+                            <Route exact path="/comments/:postId(\d+)" render={props =>
+                                <CommentsListByPost {...props} />}
+                            />
+                            <Route exact path="/new_comment/:postId(\d+)" render={props =>
+                                <CommentForm {...props} />}/>
+                            <Route exact path="/comments/edit/:postId(\d+)" render={
+                                props => <CommentForm {...props} />
+                            } />
+                        </PostProvider>
+                    </CommentProvider>
+                </CategoryProvider>
             </main>
         </>
     )
