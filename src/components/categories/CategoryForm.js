@@ -22,7 +22,9 @@ export const CategoryForm = (props) => {
 
     return (
         <form className="form categoryForm">
-            <h2 className="categoryForm_title">Add New Category</h2>
+            <h2 className="categoryForm_title">
+                Add New Category
+            </h2>
             <fieldset>
                 <div className="form-group">
                     <input type="text" name="category" required autoFocus className="form-control"

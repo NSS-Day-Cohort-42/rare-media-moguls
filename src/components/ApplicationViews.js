@@ -30,7 +30,7 @@ export const ApplicationViews = (props) => {
                     <nav className="cont--nav">
                         <Nav {...props} />
                     </nav>)} />
-            
+
 
             <TagProvider>
                 <PostTagProvider>
@@ -42,27 +42,20 @@ export const ApplicationViews = (props) => {
                 </PostTagProvider>
             </TagProvider>
 
-                <PostProvider>
-                    <CategoryProvider>
-                        <Route exact path="/new_post" render={
-                            props => <PostForm {...props} />
-                        } />
-                        <Route exact path="/posts/edit/:postId(\d+)" render={
-                            props => <PostForm {...props} />
-                        } />
-                    </CategoryProvider>
-                </PostProvider>
-
                 <CategoryProvider>
                     <Route exact path="/categories/create" render={(props) =>
                         <CategoryForm {...props} />}/>
                     <Route exact path="/categories" render={(props) =>
-                        <CategoriesList {...props} />}/>
-                </CategoryProvider>
-
-                <CategoryProvider>
+                        <CategoriesList {...props} />}
+                    />
                     <PostProvider>
                         <>
+                            <Route exact path="/new_post" render={
+                                props => <PostForm {...props} />
+                            } />
+                            <Route exact path="/posts/edit/:postId(\d+)" render={
+                                props => <PostForm {...props} />
+                            } />
                             <Route exact path="/" render={(props) => (
                                 <>
                                     <div className="main-wrap">

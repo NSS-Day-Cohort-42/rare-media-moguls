@@ -12,6 +12,40 @@
     cursor: pointer;
 }
 
+.categories {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    justify-items: center;
+    max-width: 25%;
+}
+.category-item {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    margin: 0.5rem 0.5rem;
+    padding: 0.35rem 1.5rem;
+    box-shadow: 0.15rem 0.15rem 0.3rem #90969b;
+}
+
+.cat-name {
+    text-align:center;
+    font-weight: 500 !important;
+    font-size: 18px;
+}
+
+.cat-list-cont {
+    border: 1px solid #90969b;
+    width: 100%;
+    
+}
+
+.btn-group {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-evenly;
+}
+
 .cat-btn-name {
     font-weight: 500;
     font-size: 12px;
@@ -28,8 +62,9 @@
 
 .cat-btn-list-title {
     font-size: 14px;
-    font-weight: 800;
+    font-weight: 900 !important;
     padding-left: .45rem;
+    text-transform: uppercase;
 }
 
 .cat-btn--list {
