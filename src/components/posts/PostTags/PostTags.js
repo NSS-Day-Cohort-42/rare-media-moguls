@@ -14,6 +14,10 @@ export const PostTags = ({postId}) => {
         getPostTagsByPost(postId)
     }, [postId, postTagIds]);
 
+    useEffect(() => {
+        getTags()
+    }, [])
+
     const toggleEdit = () => {
         setIsEditing(!isEditing)
         isEditing ? getTags() : getPostTagsByPost(postId)
