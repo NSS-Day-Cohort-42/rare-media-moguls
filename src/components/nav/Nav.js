@@ -18,6 +18,12 @@ export const Nav = (props) => {
         }
     }
 
+    const checkAuth = () => {
+        if (localStorage.getItem("rare_user_id")) {
+            return true
+    } return false
+}
+
     useEffect(()=>{
         if(localStorage.getItem("rare_user_id") !== null){
             setLoggedIn(true)
@@ -49,11 +55,16 @@ export const Nav = (props) => {
                     <div className="top-space"></div>
                     <div className="link nav__link wrapper__nav--right">
                         <div className="nav__link-wrapper post-wrapper">
-                            <Link
-                            className="link nav__link posts-link"
-                            to="/">
-                                posts
-                            </Link>
+                            {
+                                checkAuth() ?
+                                <Link
+                                    className="link nav__link posts-link"
+                                    to="/">
+                                    posts
+                                </Link>
+                                : null
+                            }
+                            
                         </div>
                         {loggedIn
                         ?
