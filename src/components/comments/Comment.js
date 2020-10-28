@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useRef } from "react"
+import React, { useContext, useRef } from "react"
 import { CommentContext } from "./CommentProvider"
 
 export const Comment = (props) => {
-    const {deleteComment, getComments, comments} = useContext(CommentContext)
+    const {deleteComment} = useContext(CommentContext)
     const deleteCommentDialog = useRef(null)
 
     const handleDate = (date) => {

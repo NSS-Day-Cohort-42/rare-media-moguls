@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useRef } from "react"
+import React, { useContext, useState } from "react"
 import { CommentContext } from "./CommentProvider"
 
 export const CommentForm = (props) => {
@@ -8,7 +8,6 @@ export const CommentForm = (props) => {
     const [comment, setComment] = useState({})
 
     const editMode = props.match.params.hasOwnProperty("postId")
-    console.log(props)
 
     const handleControlledInputChange = (eve) => {
         const newComment = Object.assign({}, comment)
