@@ -12,9 +12,11 @@ import { TagProvider } from "./tags/TagProvider";
 import { CategoriesList } from "./categories/CategoriesList"
 import { TagsList } from "./tags/TagsList"
 import { PostDetails } from "./posts/PostDetail"
+import { CommentProvider } from "./comments/CommentProvider";
+import { CommentsListByPost } from "./comments/CommentsList";
 import { PostTagProvider } from "./posts/PostTags/PostTagProvider"
 import { CommentForm } from "./comments/CommentForm"
-import { CommentProvider } from "./comments/CommentProvider";
+
 
 
 
@@ -53,11 +55,9 @@ export const ApplicationViews = (props) => {
 
                 <CategoryProvider>
                     <Route exact path="/categories/create" render={(props) =>
-                        <CategoryForm {...props} />}
-                    />
+                        <CategoryForm {...props} />}/>
                     <Route exact path="/categories" render={(props) =>
-                        <CategoriesList {...props} />}
-                    />
+                        <CategoriesList {...props} />}/>
                 </CategoryProvider>
 
                 <CategoryProvider>
@@ -76,7 +76,7 @@ export const ApplicationViews = (props) => {
                                             <div className="right-main">
                                                 <CategoryButtonList
                                                     {...props} />
-                                    </div>
+                                            </div>
                                         </div>
                                         <div className="bottom-spacer"></div>
                                     </div>
@@ -85,19 +85,22 @@ export const ApplicationViews = (props) => {
                         </>
                     </PostProvider>
                 </CategoryProvider>
+
+                <TagProvider>
+                    <Route exact path="/tags" render={props =>
+                        <TagsList {...props} />}/>
+                </TagProvider>
+
                 <CommentProvider>
-                    <Route path="/new_comment/:postId(\d+)" render={(props) =>
-                            <CommentForm {...props} />}
+                    <PostProvider>
+                        <Route exact path="/comments/:postId(\d+)" render={props =>
+                            <CommentsListByPost {...props} />}
                         />
-
+                    <Route exact path="/new_comment/:postId(\d+)" render={props =>
+                            <CommentForm {...props} />}/>
+                    </PostProvider>
                 </CommentProvider>
-
-
-                        <TagProvider>
-                            <Route exact path="/tags" render={props =>
-                                <TagsList {...props} />}
-                            />
-                        </TagProvider>
             </main>
         </>
-    )};
+    )
+};
