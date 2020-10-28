@@ -1,11 +1,17 @@
 import React from "react"
+import "./Category.css"
 
 export const CategoriesList = (props) => {
     return (
         <>
-        <button onClick={() => props.history.push("/categories/create")}>
-                Add New Category
-        </button>
+        <div className="catListContainer">
+            <button 
+                className="btn addCategoryBtn"
+                onClick={() => props.history.push("/categories/create")}>
+                    Add New Category
+            </button>
+
+        </div>
         </>
     )
 }

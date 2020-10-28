@@ -1,5 +1,6 @@
 import React, {useContext, useState, useEffect} from "react"
 import { CategoryContext } from "./CategoryProvider"
+import "./Category.css"
 
 export const CategoryForm = (props) => {
     const {addCategory} = useContext(CategoryContext)

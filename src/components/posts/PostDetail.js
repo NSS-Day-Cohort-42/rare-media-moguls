@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState, useRef } from "react"
 import { PostContext } from "./PostProvider"
+import "./Post.css"
+import { PostTags } from "./PostTags/PostTags"
 
 
 export const PostDetails = (props) => {
@@ -27,15 +29,15 @@ export const PostDetails = (props) => {
             return (
                 <div className="postButtonContainer">
                     <button
-                        className="btn postEditBtn"
+                        className="btn-small fa fa-edit"
                         onClick={() => {
                             props.history.push(`/posts/edit/${post.id}`)
-                        }}>Edit Post</button>
+                        }}></button>
                     <button
-                        className="btn postDeleteBtn"
+                        className="btn-small fa fa-trash"
                         onClick={() => {
                             deletePostDialog.current.showModal()
-                        }}>Delete Post</button>
+                        }}></button>
                 </div>
             )
         }
@@ -55,20 +57,23 @@ export const PostDetails = (props) => {
             <div className="postDetailContainer">
                 <h2 className="postTitle">{post.title}</h2>
                 <div className="author_date_container">
-                    <h3>{post.user.display_name}</h3>
-                    <h4>{handleDate(post.publication_date)}</h4>
+                    <h3 className="authorName">{post.user.display_name}</h3>
+                    <h3>{handleDate(post.publication_date)}</h3>
                 </div>
                 <div className="postContent">
                     <p>{post.content}</p>
                 </div>
                 {editDeleteButtons()}
+                <div className="commentButtonContainer">
+                    <button
+                        className="btn postCommentBtn"
+                        onClick={() => {
+                            props.history.push(`/new_comment/${post.id}`)
+                        }}>Add Comment</button>
+                </div>
             </div>
-            <div className="commentButtonContainer">
-                <button
-                    className="btn postEditBtn"
-                    onClick={() => {
-                        props.history.push(`/new_comment/${post.id}`)
-                    }}>Add Comment</button>
+            <div>
+                <PostTags postId={post.id} />
             </div>
             
         </>

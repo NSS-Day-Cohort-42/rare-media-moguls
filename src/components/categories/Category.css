@@ -42,3 +42,13 @@
     color: white;
     background-color: black;
 }
+
+.catListContainer {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.categoryForm {
+    width: 45em;
+    margin: auto;
+}

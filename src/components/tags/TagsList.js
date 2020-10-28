@@ -20,7 +20,9 @@ export const TagsList = (props) => {
                 isHidden={isHidden}
                 setIsHidden={setIsHidden}
                 {...props} />
-                <button onClick={()=>{
+                <button 
+                    className="btn"
+                    onClick={()=>{
                     setIsHidden(false)}}>
                     Add New Tag
                 </button>

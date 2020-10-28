@@ -1,0 +1,36 @@
+.post-author {
+    display: flex;
+    margin-bottom: -20px;
+    font-size: 1.25rem;
+}
+
+.mainPostContainer {
+    margin-left: 10em;
+}
+
+.postLink {
+    color: rgb(1, 36, 1);
+    font-size: 1.25rem;
+}
+
+.postLink:hover {
+    color: rgb(160, 158, 158);
+}
+
+.new_post_form {
+    width: 45em;
+    margin: auto;
+}
+
+.postDetailContainer {
+    width: 45em;
+    margin: auto;
+}
+
+.author_date_container {
+    display: flex;
+}
+
+.authorName {
+    margin-right: 15px;
+}

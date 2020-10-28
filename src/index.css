@@ -39,7 +39,7 @@ code {
 }
 
 /* General button style */
-.btn {
+/* .btn {
 	border: none;
 	font-family: Menlo;
 	font-size: inherit;
@@ -67,7 +67,7 @@ code {
 	-webkit-transition: all 0.3s;
 	-moz-transition: all 0.3s;
 	transition: all 0.3s;
-}
+} */
 
 /* Pseudo elements for icons */
 .btn:before {

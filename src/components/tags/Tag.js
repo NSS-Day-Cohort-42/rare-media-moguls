@@ -6,11 +6,11 @@ export const Tag = ({tag}) => {
         <section className="tag">
                 <div className="tag_name">{tag.tag}</div>
 
-                <button className=" btn editTagButton">
-                    Edit
+                <button className=" btn-small fa fa-edit">
+                
                 </button>
-                <button className="btn deleteTagButton">
-                    Delete
+                <button className="btn-small fa fa-trash">
+                   
                 </button>
         </section> 
         </>
