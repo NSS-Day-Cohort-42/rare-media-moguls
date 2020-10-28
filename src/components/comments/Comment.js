@@ -20,12 +20,12 @@ export const Comment = (props) => {
                         className="btn commentEditButton"
                         onClick={() => {
                             props.history.push(`/comments/edit/${props.comment.post_id}`)
-                        }}>Edit Post</button>
+                        }}>Edit Comment</button>
                     <button
                         className="btn commentDeleteButton"
                         onClick={() => {
                             deleteCommentDialog.current.showModal()
-                        }}>Delete Post</button>
+                        }}>Delete Comment</button>
                 </div>
             )
         }
