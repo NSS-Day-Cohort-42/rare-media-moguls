@@ -47,17 +47,20 @@ code {
 	background: none;
 	cursor: pointer;
     padding: 0.35rem 1.5rem;
-    box-shadow: 0.25rem 0.25rem 0.7rem #90969b;
 	display: inline-block;
-	margin: 0.5rem 0.75rem;
-	text-transform: uppercase;
+	margin: 0.5rem 0.5rem;
+	text-transform: lowercase;
 	letter-spacing: 1px;
-	font-weight: 700;
+	font-weight: 500;
 	outline: none;
 	position: relative;
 	-webkit-transition: all 0.3s;
 	-moz-transition: all 0.3s;
 	transition: all 0.3s;
+}
+
+.btn:hover {
+    box-shadow: 0.25rem 0.25rem 0.4rem #90969b;
 }
 
 .btn:after {
