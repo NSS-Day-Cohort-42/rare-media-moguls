@@ -17,15 +17,15 @@ export const Comment = (props) => {
             return (
                 <div className="commentsButtonContainer">
                     <button
-                        className="btn commentEditButton"
+                        className="btn-small fa fa-edit"
                         onClick={() => {
                             props.history.push(`/comments/edit/${props.comment.post_id}`)
-                        }}>Edit Comment</button>
+                        }}></button>
                     <button
-                        className="btn commentDeleteButton"
+                        className="btn-small fa fa-trash"
                         onClick={() => {
                             deleteCommentDialog.current.showModal()
-                        }}>Delete Comment</button>
+                        }}></button>
                 </div>
             )
         }
