@@ -23,8 +23,10 @@
 }
 
 .postDetailContainer {
-    width: 45em;
-    margin: auto;
+    /* width: 35em; */
+    flex-basis: 50%;
+    border-right: 1px solid  rgba(197, 197, 197, 0.568);
+    
 }
 
 .author_date_container {
@@ -33,4 +35,41 @@
 
 .authorName {
     margin-right: 15px;
+}
+
+.postTagContainer {
+    text-align: center;
+    flex-basis: 30%;
+    margin-right: auto;
+}
+
+.postFlex {
+    display: flex;
+    margin-top: 20px;
+    flex-basis: auto;
+    
+}
+.post-tags-container {
+    width: 10em;
+}
+
+.flexLeftSpace {
+    flex-basis: 20%;
+}
+
+.edit-post-tags-bttn {
+    background-color: white;
+    color: black;
+    border: black 1px solid;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 6px; 
+}
+
+.edit-post-tags-bttn:hover {
+    background-color: rgb(141, 106, 17);
+    border: none;
+    color: white;
 }

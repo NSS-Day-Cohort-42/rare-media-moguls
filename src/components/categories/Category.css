@@ -18,6 +18,7 @@
     justify-content: center;
     justify-items: center;
     max-width: 25%;
+    margin: auto;
 }
 .category-item {
     display: flex;
@@ -87,3 +88,4 @@
     width: 45em;
     margin: auto;
 }
+
