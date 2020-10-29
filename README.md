@@ -5,7 +5,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## Installation
 • From Github clone the ssh key using git clone
 
-• The server side repo can be found [here](https://github.com/NSS-Day-Cohort-42/rare-server-media-moguls) with intstructions to install and run
+• The server side repo can be found [here](https://github.com/NSS-Day-Cohort-42/rare-server-media-moguls) with instructions to install and run
 
 ## Utilities
 
@@ -55,6 +55,10 @@ Austin Phy:
     •add and remove tags from posts
 
 Conner Blakeney:
+    •register user
+    •user class and server side methods
+    •view all posts/ filter posts by category
+    •delete comments
 
 Samantha Maas:
 
