@@ -7,8 +7,6 @@ export const CommentForm = (props) => {
 
     const [comment, setComment] = useState({})
 
-    const editMode = props.match.params.hasOwnProperty("postId")
-
     const handleControlledInputChange = (eve) => {
         const newComment = Object.assign({}, comment)
         newComment[eve.target.name] = eve.target.value
@@ -35,7 +33,7 @@ export const CommentForm = (props) => {
     return (
 
         <form className="form new_comment_form" id="commentForm">
-            <h2 className="commentForm_title">{editMode ? "Update Comment" : "Create a New Comment"}</h2>
+            <h2 className="commentForm_title">{"Create a New Comment"}</h2>
             <fieldset>
                 <div className="form-div">
                     <label htmlFor="subject">Subject: </label>
