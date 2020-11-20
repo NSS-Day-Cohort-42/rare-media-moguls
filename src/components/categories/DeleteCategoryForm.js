@@ -1,20 +1,20 @@
 import React, { useContext, useState, useEffect } from "react"
-import { TagContext } from "./TagProvider"
-import "./Tag.css"
+import { CategoryContext } from "./CategoryProvider"
+import "./Category.css"
 
-export const DeleteTagForm = (props) => {
-    
-    const { deleteTag, getTags } = useContext(TagContext)
+export const DeleteCategoryForm = (props) => {
+
+    const { deleteCategory, getCategorys } = useContext(CategoryContext)
 
     const [fadeOut, setFadeOut]=useState(false)
     const [close, setClose] = useState(false)
 
-    const removeTag = () => {
-        const tagId = props.tagToBeDeleted.id
-        deleteTag(tagId)
+    const removeCategory = () => {
+        const categoryId = props.categoryToBeDeleted.id
+        deleteCategory(categoryId)
             .then(()=> {
                 setClose(true)
-                getTags()
+                getCategorys()
             })
         }
 
@@ -24,7 +24,7 @@ export const DeleteTagForm = (props) => {
             setFadeOut(true)
             fadeTimer = setTimeout(()=>{
                 props.setDeleteMode(false)
-                props.setTagToBeDeleted({})
+                props.setCategoryToBeDeleted({})
                 setFadeOut(false)
             }, 340)
         }
@@ -34,32 +34,32 @@ export const DeleteTagForm = (props) => {
     }, [close])
 
     return (
-        <div className={`delete-tag-form__container ${fadeOut ? "fade-out":"fade-in"}`}>
-            <form className="form remove_tag_form" id="editTagForm">
+        <div className={`delete-category-form__container ${fadeOut ? "fade-out":"fade-in"}`}>
+            <form className="form remove_category_form" id="editCategoryForm">
                 <div className="toprow">
                     <div className="toprowblank"></div>
                     <span className="x" onClick={()=>{
                         setClose(true)
-                        props.setTagToBeDeleted({})
+                        props.setCategoryToBeDeleted({})
                     }}>X</span>
                 </div>
-                <p className="deleteTagForm_label">Are you sure you want to delete this Tag?</p>
-                <div className="delete-tag-form__tag">
-                    {props.tagToBeDeleted.label}
+                <p className="deleteCategoryForm_label">Are you sure you want to delete this Category?</p>
+                <div className="delete-category-form__category">
+                    {props.categoryToBeDeleted.label}
                 </div>
                 <div className="button__container">
-                    <button type="button" className="btn delete-tag-form__save"
+                    <button type="button" className="btn delete-category-form__save"
                     onClick={e => {
                         e.preventDefault()
-                        removeTag()
+                        removeCategory()
                     }}>
                         Ok
                     </button>
-                    <button type="button" className="btn delete-tag-form__cancel"
+                    <button type="button" className="btn delete-category-form__cancel"
                     onClick={e => {
                         e.preventDefault()
                         setClose(true)
-                        props.setTagToBeDeleted({})
+                        props.setCategoryToBeDeleted({})
                     }}>
                         Cancel
                     </button>

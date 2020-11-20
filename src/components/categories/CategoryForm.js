@@ -4,58 +4,68 @@ import "./Category.css"
 import { UserContext } from "../users/UserProvider"
 
 export const CategoryForm = (props) => {
-    const { addCategory, getCategories } = useContext(CategoryContext)
+    const { addCategory } = useContext(CategoryContext)
     const { currentUser, getCurrentUser } = useContext(UserContext)
 
-    const [currentCategory, setCategory] = useState({
-        label: ""
-    })
+    const [isDisabled, setIsDisabled] = useState(true)
+    const [category, setCategory] = useState({})
 
-
-    const handleControlledInputChange = (event) => {
-        const newCategory = Object.assign({}, currentCategory)
-        newCategory[event.target.name] = event.target.value
+    const handleControlledInputChange = (e) => {
+        const inputVal = e.target.value
+        if(inputVal.length === 0 || inputVal.length > 30){
+            setIsDisabled(true)
+        }
+        else{
+            setIsDisabled(false)
+        }
+        const newCategory = Object.assign({}, category)
+        newCategory[e.target.name] = e.target.value
         setCategory(newCategory)
     }
 
-
     useEffect(() => {
-        getCategories()
         getCurrentUser()
     }, [])
 
 
     const constructNewCategory = () => {
-        const category = { label: currentCategory.label }
+        const label = category.label
+        const category = {
+            label: label
+        }
         addCategory(category)
-            .then(() => props.history.push("/categories"))
+            .then(() => {
+                const newCategory = {}
+                setCategory(newCategory)
+                document.getElementById("categoryForm").reset()
+            })
     }
 
     return (
         <>
-            {currentUser.is_staff === true ? (
-                <form className="form categoryForm">
-                    <h2 className="categoryForm_title">
-                        Add New Category
-            </h2>
-                    <fieldset>
-                        <div className="form-group">
-                            <input type="text" name="label" required autoFocus className="form-control"
-                                proptype="varchar"
-                                placeholder="Category Name"
-                                defaultValue={currentCategory.label}
-                                onChange={handleControlledInputChange}
-                            />
-                        </div>
-                    </fieldset>
-                    <button type="submit" className="btn saveCategoryButton" onClick={evt => {
-                        evt.preventDefault()
+            {currentUser.is_staff
+            ? (
+                <form className="form new_category_form" id="categoryForm">
+                    <p className="create-categoryForm_label">
+                        Create a New Category
+                    </p>
+                    <div className="input__container">
+                        <input type="text" name="label" className="form-control category-input" placeholder="Category Name" defaultValue={category.label} autoComplete="off"
+                        onChange={handleControlledInputChange}
+                        />
+                    </div>
+                    <div className="button__container">
+                    <button type="button" className="btn create-category__btn" disabled={isDisabled} onClick={e => {
+                        e.preventDefault()
                         constructNewCategory()
-                    }}>Save New Category</button>
+                    }}>
+                        Create
+                    </button>
+                    </div>
                 </form>
-            ) : (
-                    <div></div>
                 )
+            : <>
+            </>
             }
         </>
     )

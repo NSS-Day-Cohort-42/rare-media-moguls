@@ -47,37 +47,38 @@ export const Login = (props) => {
             </dialog>
             <section>
                 <form className="form--login" onSubmit={handleLogin}>
-                    <h1>Rare</h1>
-                    <img className="login-img" src="https://via.placeholder.com/300x150.png"></img>
-                    <fieldset>
+                    <div className="image_login"></div>
+                    <div className="input__container">
                         <input
                             ref={username}
                             type="text"
                             id="username"
-                            className="form-control"
+                            className="form-control username-login"
                             defaultValue="marymogul"
                             placeholder="Username"
                             required
+                            autoComplete="off"
+                            spellCheck="off"
                             autoFocus />
-                    </fieldset>
-                    <fieldset>
                         <input ref={password}
                             type="password"
                             id="password"
-                            className="form-control"
+                            className="form-control pw-login"
+                            autoComplete="off"
+                            spellCheck="off"
                             defaultValue="me"
                             placeholder="Password"
                             required />
-                    </fieldset>
-                    <fieldset style={{
-                        textAlign:"center"
-                    }}>
-                        <button className="btn login-button" type="submit">Login</button>
-                    </fieldset>
+                    </div>
+                    <div className="button__container">
+                        <button className="btn login-button" type="submit">
+                            Login
+                        </button>
+                    </div>
                 </form>
             </section>
             <section className="link--register">
-                <Link to="/register">Don't have an account yet? Click here to sign up!</Link>
+                <Link className="link--register-clickable" to="/register">Don't have an account yet? Click here to sign up!</Link>
             </section>
         </main>
     )

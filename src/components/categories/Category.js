@@ -1,40 +1,38 @@
 import React, { useContext, useEffect } from "react"
-import { CategoryContext } from "./CategoryProvider";
-import "./Category.css"
-import { Link } from "react-router-dom";
 import { UserContext } from "../users/UserProvider";
+import { EditCategoryButton } from "./EditCategoryButton"
+import { DeleteCategoryButton } from "./DeleteCategoryButton"
+import "./Category.css"
 
 export const Category = (props) => {
-
-    const { deleteCategory } = useContext(CategoryContext)
     const { currentUser, getCurrentUser } = useContext(UserContext)
 
     useEffect(() => {
         getCurrentUser()
     }, [])
 
+    const handleEditButtonClick = (e) => {
+        props.setCurrentCategory(e)
+        props.setEditMode(true)
+        props.setDeleteMode(false)
+        props.setCategoryToBeDeleted({})
+    }
+    const handleDeleteButtonClick = (e) => {
+        props.setCategoryToBeDeleted(e)
+        props.setDeleteMode(true)
+        props.setEditMode(false)
+        props.setCurrentCategory({})
+    }
     return (
         <>
             <section className="category">
-                {currentUser.is_staff === true ? (
-                    <>
-                        <button className="btn-small fa fa-edit" onClick={() => {
-                            props.setEditMode(true)
-                            props.setCurrentCategory(props.category)
-                        }}>
-                        </button>
-                        <button className="btn-small fa fa-trash" onClick={() => deleteCategory(props.category.id)}>
-                        </button>
-                        <div className="cat-name">
-                        <Link to={`posts/category/${props.category.id}`}>{props.category.label}</Link>
-                        </div>
-                    </>)
-                    : (
-                        <div className="cat-name">
-                            {props.category.label}
-                        </div>
-                    )}
-
+                <EditCategoryButton currentUser={currentUser} category={props.category} handleEditButtonClick={handleEditButtonClick} {...props} />
+                <DeleteCategoryButton currentUser={currentUser} category={props.category} handleDeleteButtonClick={handleDeleteButtonClick} {...props} />
+                <div className="category-label__container">
+                    <p className="category__label">
+                        {props.category.label}
+                    </p>
+                </div>
             </section>
         </>
     )

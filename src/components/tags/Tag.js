@@ -1,5 +1,8 @@
 import React, { useContext, useEffect } from "react"
 import { UserContext } from "../users/UserProvider"
+import { EditTagButton } from "./EditTagButton"
+import { DeleteTagButton } from "./DeleteTagButton"
+import "./Tag.css"
 
 export const Tag = (props) => {
     const { currentUser, getCurrentUser } = useContext(UserContext)
@@ -8,31 +11,30 @@ export const Tag = (props) => {
         getCurrentUser()
     }, [])
 
+    const handleEditButtonClick = (e) => {
+        props.setTagToBeEdited(e)
+        props.setEditMode(true)
+        props.setDeleteMode(false)
+        props.setTagToBeDeleted({})
+    }
+    const handleDeleteButtonClick = (e) => {
+        props.setTagToBeDeleted(e)
+        props.setDeleteMode(true)
+        props.setEditMode(false)
+        props.setTagToBeEdited({})
+    }
+
     return (
         <>
             <section className="tag">
-                {currentUser.is_staff === true ? (
-                    <>
-                        <button className=" btn-small fa fa-edit" onClick={() => {
-                            props.setTagToBeEdited(props.tag)
-                            props.setEditMode(true)
-                            props.setDeleteMode(false)
-                            props.setTagToBeDeleted({})
-                        }}>
-                        </button>
-                        <button className="btn-small fa fa-trash" onClick={() => {
-                            props.setTagToBeDeleted(props.tag)
-                            props.setDeleteMode(true)
-                            props.setEditMode(false)
-                            props.setTagToBeEdited({})
-                        }}>
-                        </button>
-                        <div className="tag_name">{props.tag.label}</div>
-                    </>
-                ) : (
-                        <div className="tag_name">{props.tag.label}</div>
-                    )}
+                <EditTagButton currentUser={currentUser} tag={props.tag} handleEditButtonClick={handleEditButtonClick} {...props} />
+                <DeleteTagButton currentUser={currentUser} tag={props.tag} handleDeleteButtonClick={handleDeleteButtonClick} {...props} />
+                <div className="tag-label__container">
+                    <p className="tag__label">
+                        {props.tag.label}
+                    </p>
+                </div>
             </section>
         </>
-    )
+        )
 }

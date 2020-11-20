@@ -9,6 +9,8 @@ export const Post = (props) => {
     const {deletePost} = useContext(PostContext)
     const{getCurrentUser, currentUser} = useContext(UserContext)
     const deletePostDialog = useRef(null)
+    const [admin, setAdmin] = useState(false)
+    const [author, setPostAuthor] = useState()
 
     useEffect(() => {
         getCurrentUser()
@@ -61,10 +63,10 @@ export const Post = (props) => {
                     </div>
                 </div>
                 <div className="middle">
-                {props.post.image_url ? 
+                {props.post.image_url ?
                             <div className="divImg-postList">
                                 <img className="img-postList" src={props.post.image_url}></img>
-                            </div>    
+                            </div>
                             :null
                  }
                  </div>

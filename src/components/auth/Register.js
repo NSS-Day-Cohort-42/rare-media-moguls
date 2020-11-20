@@ -19,6 +19,8 @@ export const Register = (props) => {
         const reader = new FileReader();
         reader.addEventListener('load', () => callback(reader.result));
         reader.readAsDataURL(file);
+        console.log(reader, "READER")
+        console.log(file, "FILE")
     }
 
     const createProfileImageJSON = (event) => {
@@ -60,52 +62,38 @@ export const Register = (props) => {
     }
 
     return (
-        <main style={{ textAlign: "center" }}>
+        <main className="register--contain" style={{ textAlign: "center" }}>
 
             <dialog className="dialog dialog--password" ref={passwordDialog}>
                 <div>Passwords do not match</div>
                 <button className="button--close" onClick={e => passwordDialog.current.close()}>Close</button>
             </dialog>
 
+            <div className="image_register"></div>
             <form className="form--login form--register" onSubmit={handleRegister}>
-                <h1 className="h3 mb-3 font-weight-normal">Rare</h1>
-                <img className="register-img" src="https://via.placeholder.com/200x125.png"></img>
-                <fieldset className="register-input">
-                    <input ref={first_name} type="text" name="first_name" className="form-control" placeholder="First Name" required autoFocus />
-                </fieldset>
-                <fieldset className="register-input">
-                    <input ref={last_name} type="text" name="last_name" className="form-control" placeholder="Last Name" required />
-                </fieldset>
-                <fieldset className="register-input">
-                    <input ref={email} type="email" name="email" className="form-control" placeholder="Email" required />
-                </fieldset>
-                <fieldset className="register-input">
-                    <input ref={username} name="username" className="form-control" placeholder="Username" />
-                </fieldset>
-                <fieldset>
-                    <label htmlFor="bio"> Bio </label>
-                    <input ref={bio} name="bio" className="form-control" placeholder="A little bit about yourself..." />
-                </fieldset>
-                <fieldset>
-                    <label htmlFor="profile_image_url"> Profile Image </label>
-                    <input className="register-input" type="file" id="profile_image" onChange={(evt) => {createProfileImageJSON(evt)}}/>
-                </fieldset>
-                <fieldset>
-                    <label htmlFor="inputPassword"> Password </label>
-                    <input ref={password} type="password" name="password" className="form-control" placeholder="Password" required />
-                </fieldset>
-                <fieldset className="register-input">
-                    <input ref={verifyPassword} type="password" name="verifyPassword" className="form-control" placeholder="Verify password" required />
-                </fieldset>
-                <fieldset style={{
-                    textAlign: "center"
-                }}>
-                    <button className="btn login-button" type="submit">Register</button>
-                </fieldset>
+                <div className="input__wrapper">
+                    <div className="input__container--left">
+                        <input ref={first_name} type="text" name="first_name" className="form-control first_name" placeholder="First Name" autoComplete="off" spellCheck="off" autoFocus />
+
+                        <input ref={last_name} type="text" name="last_name" className="form-control last_name" placeholder="Last Name" autoComplete="off" spellCheck="off" />
+                        <input ref={email} type="email" name="email" className="form-control email" placeholder="Email" autoComplete="off" spellCheck="off" />
+                    </div>
+
+                    <div className="input__container--right">
+                        <input ref={username} name="username" className="form-control username-register" placeholder="Username" autoComplete="off" spellCheck="off" />
+                        <input ref={password} type="password" name="password" className="form-control pw-register" placeholder="Password" autoComplete="off" spellCheck="off" />
+                        <input ref={verifyPassword} type="password" name="verifyPassword" className="form-control pw-verify" placeholder="Verify password" autoComplete="off" spellCheck="off" />
+                        <textarea ref={bio} name="bio" className="form-control bio" placeholder="Bio" />
+                        <input className="register-input" type="file" id="profile_image" onChange={(evt) => {createProfileImageJSON(evt)}}/>
+
+                        <button className="btn login-button" type="submit">Register</button>
+                        <section className="link--register">
+                            Already registered? <Link className="link--register-clickable" to="/login">Login</Link>
+                        </section>
+                    </div>
+                </div>
+
             </form>
-            <section className="link--register">
-                Already registered? <Link to="/login">Login</Link>
-            </section>
         </main>
     )
 }

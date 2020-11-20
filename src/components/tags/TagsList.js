@@ -19,19 +19,17 @@ export const TagsList = (props) => {
     return (
         <>
         <div className="tagList-containerFlex">
-
             <section className="tags">
-                <h2>Tags</h2>
-                {
-                    tags.map(tag => {
+                <p className="tag-list__heading">Tags</p>
+                {tags.map(tag => {
                         return <Tag
-                                key={tag.id}
-                                tag={tag}
-                                setEditMode={setEditMode}
-                                setDeleteMode={setDeleteMode}
-                                setTagToBeEdited={setTagToBeEdited}
-                                setTagToBeDeleted={setTagToBeDeleted}
-                                {...props} />
+                        key={tag.id}
+                        tag={tag}
+                        setEditMode={setEditMode}
+                        setDeleteMode={setDeleteMode}
+                        setTagToBeEdited={setTagToBeEdited}
+                        setTagToBeDeleted={setTagToBeDeleted}
+                        {...props} />
                     }).reverse()
                 }
             </section>
@@ -41,6 +39,7 @@ export const TagsList = (props) => {
                 tagToBeEdited={tagToBeEdited}
                 setTagToBeEdited={setTagToBeEdited}
                 setEditMode={setEditMode}
+                editMode={editMode}
                 {...props} />
                 : null
                 }
