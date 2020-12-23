@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from "react";
+import React from 'react'
 import "./Rare.css";
 import TagRoutes from "./routes/TagRoutes";
 import NavRoutes from "./routes/NavRoutes";
@@ -6,9 +6,6 @@ import CategoryRoutes from "./routes/CategoryRoutes";
 import PostRoutes from "./routes/PostRoutes";
 import CommentRoutes from "./routes/CommentRoutes";
 import UserProfileRoutes from "./routes/UserProfileRoutes";
-import { UserContext } from "./users/UserProvider"
-
-
 
 export const ApplicationViews = (props) => {
 

@@ -5,7 +5,7 @@ export const PostImage = (props) => {
         <>
         {props.post.image_url
         ?
-            <div className="post-image-container">
+            <div className="post-image-container" onClick={()=> props.history.push(`/posts/${props.post.id}`)}>
                 <img
                 className="post-image"
                 src={props.post.image_url} />

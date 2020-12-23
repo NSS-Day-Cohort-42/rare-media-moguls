@@ -63,9 +63,9 @@ export const Nav = (props) => {
                             {loggedIn
                             ?<>
                                 <button
-                                title="Review My Posts"
+                                title="View My Posts"
                                 className="btn nav__btn my-posts"
-                                onClick={()=>props.history.push(`/users/posts`)}>
+                                onClick={()=>props.history.push(`/posts/mine`)}>
                                     My Posts
                                 </button>
 

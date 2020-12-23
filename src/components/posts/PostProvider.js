@@ -16,7 +16,6 @@ export const PostProvider = (props) => {
             }
         })
             .then(res => res.json())
-            .then(setPosts)
     }
 
     const getPostById = (postId) => {
@@ -54,9 +53,10 @@ export const PostProvider = (props) => {
     }
 
     const getPostsByAuthor = (userId) => {
-        return fetch(`${api}?rareuser_id=${userId}`, {
+        return fetch(`${api}?author_id=${userId}`, {
             headers: {
-                "Authorization": `Token ${token}`
+                "Authorization": `Token ${token}`,
+                "Content-Type": "application/json"
             }
         })
         .then(res => res.json())
@@ -106,7 +106,7 @@ export const PostProvider = (props) => {
             .then(getPosts)
     }
 
-    const getSubscribedPosts = userId => {
+    const getSubscribedPosts = (userId) => {
         return fetch(`${api}?subscribed=${userId}`, {
         headers: {
             "Authorization": `Token ${token}`,

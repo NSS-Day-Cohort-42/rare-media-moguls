@@ -12,29 +12,101 @@ import Post from "./Post"
 export const PostList = (props) => {
 // REFS
 // CONTEXT
-    const {posts, getPosts, getPostsByUser, getPostsByCategoryId} = useContext(PostContext)
-    const {currentUser, getCurrentUser} = useContext(UserContext)
+    const {getPosts, getSubscribedPosts, getPostsByAuthor, getPostsByCategory} = useContext(PostContext)
+    const {currentUser, getCurrentUser, setCurrentUser} = useContext(UserContext)
 // STATE
-    const [filteredPosts, setFilteredPosts] = useState([])
-    const [currentUsersPosts, setCurrentUsers] = useState([])
-    const [authorsPosts, setAuthorsPosts] = useState([])
-    const [myPostsView, setMyPostsView] = useState(props.myPosts)
-    const [byCategory, setByCategory] = useState(props.byCategory)
-
-
-    const approvedAndUserCreatedPosts = posts.filter(p => p.publication_date != null && p.approved || p.is_user_author )
-
-    // const postsForAdmins = posts.filter(p => p.publication_date != null || p.is_user_author)
-    useEffect(() => {
-        getPosts()
-        getCurrentUser()
-    },[])
+    const [ filteredPosts, setFilteredPosts ] = useState([])
+    const [ byUser, setPostsByUser ] = useState([])
+    const [ byCategory, setByCategory ] = useState([])
+    const [ myPosts, setMyPosts ] = useState([])
+    const [ subscribed, setSubscribed ] = useState([])
+    const [ allPosts, setAllPosts ]=useState([])
 
     useEffect(()=>{
-        if(posts.length !== 0){
-            setFilteredPosts(posts)
+        getCurrentUser().then(setCurrentUser)
+    }, [])
+
+    useEffect(()=>{
+        if(props.subscribed){
+            getCurrentUser().then((user)=>{
+                getSubscribedPosts(user.id).then((posts)=>{
+                    setSubscribed(posts)
+                })
+            })
         }
-    }, [posts])
+        if(props.allPosts){
+            getPosts().then(posts=>{
+                setAllPosts(posts)
+            })
+        }
+        if(props.myPosts){
+            getCurrentUser().then((user)=>{
+                getPostsByAuthor(user.id).then( posts =>{
+                    setMyPosts(posts)
+                })
+            })
+        }
+        if(props.byUser){
+            const userId = parseInt(props.match.params.userId)
+            getPostsByAuthor(userId).then((posts)=>{
+                setPostsByUser(posts)
+            })
+        }
+        if(props.byCategory){
+            const catId = parseInt(props.match.params.categoryId)
+            getPostsByCategory(catId).then((posts)=>{
+                setByCategory(posts)
+            })
+        }
+    }, [])
+
+    useEffect(()=>{
+        if(subscribed && currentUser && currentUser.is_staff){
+            setFilteredPosts(subscribed)
+        }
+        else{
+            const filtered = subscribed.filter(p=> p.publication_date !== null && p.approved || p.is_user_author) || []
+            setFilteredPosts(filtered)
+        }
+    }, [subscribed])
+
+    useEffect(()=>{
+        if(allPosts && currentUser){
+            if(currentUser.is_staff){
+                setFilteredPosts(allPosts)
+            }
+            else{
+                const filtered = allPosts.filter(p=> p.publication_date !== null && p.approved || p.is_user_author) || []
+                setFilteredPosts(filtered)
+            }
+        }
+    }, [allPosts])
+
+    useEffect(()=>{
+        if(byCategory && currentUser && currentUser.is_staff){
+            setFilteredPosts(byCategory)
+        }
+        else{
+            const filtered = byCategory.filter(p => p.publication_date !== null && p.approved || p.is_user_author) || []
+            setFilteredPosts(filtered)
+        }
+    }, [byCategory])
+
+    useEffect(()=>{
+        if(myPosts && currentUser){
+            setFilteredPosts(myPosts)
+        }
+    }, [myPosts])
+
+    useEffect(()=>{
+        if(byUser && currentUser && currentUser.is_staff){
+            setFilteredPosts(byUser)
+        }
+        else{
+            const filtered = byUser.filter(p=> p.publication_date !== null && p.approved || p.is_user_author) || []
+            setFilteredPosts(filtered)
+        }
+    }, [byUser])
 
     return (
         <>
@@ -53,7 +125,7 @@ export const PostList = (props) => {
                 )
             })
             }
-            </div>
-            </>
+        </div>
+        </>
     )
 }

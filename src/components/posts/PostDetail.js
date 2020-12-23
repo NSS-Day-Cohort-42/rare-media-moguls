@@ -79,7 +79,7 @@ export const PostDetails = (props) => {
                     }
                     <div className="author_date_container">
                         <p className="authorName">
-                            <Link className="postLink" to={ `/users/${post.rareuser.id}` }>
+                            <Link className="postLink" to={ `/posts/user/${post.rareuser.id}` }>
                                 by {post.author_username}
                             </Link>
                         </p>

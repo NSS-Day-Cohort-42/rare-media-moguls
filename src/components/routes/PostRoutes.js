@@ -7,9 +7,7 @@ import { PostProvider } from "../posts/PostProvider";
 import { PostDetails } from "../posts/PostDetail"
 import { PostForm } from "../posts/PostForm";
 import { PostList } from "../posts/PostList";
-import { UserPostList } from "../posts/UserPostList"
 import { ReactionProvider } from "../reactions/ReactionProvider"
-import { SubscribedPostList } from "../posts/SubscribedPostList"
 import { UserContext } from "../users/UserProvider"
 
 export default () => {
@@ -17,72 +15,108 @@ export default () => {
 
     return (
         <CategoryProvider>
-            <PostTagProvider>
-                <TagProvider>
-                    <PostProvider>
-                        <ReactionProvider>
-                            <>
-                                <Route path="/posts/:postId(\d+)" render={
-                                    props => <PostDetails {...props} />
-                                } />
-                                <Route exact path="/new_post" render={
-                                    props => <PostForm {...props} />
-                                } />
-                                <Route exact path="/posts/edit/:postId(\d+)" render={
-                                    props => <PostForm {...props} />
-                                } />
+        <PostTagProvider>
+        <TagProvider>
+        <PostProvider>
+        <ReactionProvider>
+        <>
+            <Route path="/posts/:postId(\d+)" render={props => (
+                <>
+                <div className="main-wrap">
+                    <div className="top-spacer"></div>
+                        <PostDetails {...props} />
+                    <div className="bottom-spacer"></div>
+                </div>
+                </>
+            )} />
 
-                                <Route exact path="/posts/category/:categoryId(\d+)" render={
-                                    props => <PostList byCategory {...props} />
-                                } />
-                                <Route exact path="/posts" render={(props) => (
-                                    <>
-                                        <div className="main-wrap">
-                                            <div className="top-spacer"></div>
-                                            <div className="mid-section">
-                                                <div className="left-main">
-                                                    <PostList allPosts {...props}></PostList>
-                                                </div>
-                                            </div>
-                                            <div className="bottom-spacer"></div>
-                                        </div>
-                                    </>
-                                )} />
-                                <Route exact path="/users/posts" render={(props) => (
-                                    <div className="main-wrap">
-                                        <div className="top-spacer"></div>
-                                        <div className="mid-section">
-                                            <UserPostList myPosts {...props} />
-                                        </div>
-                                        <div className="bottom-spacer"></div>
-                                    </div>
-                                )} />
-                                <Route exact path="/rare" render={(props) => (
-                                    <div className="main-wrap">
-                                        <div className="top-spacer"></div>
-                                        <div className="mid-section">
-                                            <div className="left-main">
-                                                <PostList subscribedPostList {...props} />
-                                            </div>
-                                        </div>
-                                        <div className="bottom-spacer"></div>
-                                    </div>
-                                )} />
+            <Route exact path="/new_post" render={props => (
+                <>
+                <div className="main-wrap">
+                    <div className="top-spacer"></div>
+                    <div className="mid-section">
+                        <PostForm {...props} />
+                    </div>
+                    <div className="bottom-spacer"></div>
+                </div>
+                </>
+            )} />
 
-                                <Route exact path="/posts/user/:userId(\d+)" render={(props) => (
-                                    <div className="main-wrap">
-                                        <div className="top-spacer"></div>
-                                        <div className="mid-section">
-                                            <UserPostList  {...props} />
-                                        </div>
-                                        <div className="bottom-spacer"></div>
-                                    </div>
-                                )} />
-                            </>
-                        </ReactionProvider>
-                    </PostProvider>
-                </TagProvider>
-            </PostTagProvider>
+            <Route exact path="/posts/edit/:postId(\d+)" render={props =>(
+                <>
+                <div className="main-wrap">
+                    <div className="top-spacer"></div>
+                    <div className="mid-section">
+                        <PostForm {...props} />
+                    </div>
+                    <div className="bottom-spacer"></div>
+                </div>
+                </>
+            )} />
+
+        <Route exact path="/posts/category/:categoryId(\d+)" render={props => (
+            <>
+            <div className="main-wrap">
+                <div className="top-spacer"></div>
+                <div className="mid-section">
+                    <div className="left-main">
+                        <PostList byCategory {...props} />
+                    </div>
+                </div>
+                <div className="bottom-spacer"></div>
+            </div>
+            </>
+        )} />
+        <Route exact path="/posts" render={(props) => (
+            <>
+            <div className="main-wrap">
+                <div className="top-spacer"></div>
+                <div className="mid-section">
+                    <div className="left-main">
+                        <PostList allPosts {...props} />
+                    </div>
+                </div>
+                <div className="bottom-spacer"></div>
+            </div>
+            </>
+        )} />
+        <Route exact path="/posts/user/:userId(\d+)" render={(props) => (
+            <div className="main-wrap">
+                <div className="top-spacer"></div>
+                <div className="mid-section">
+                    <PostList byUser {...props} />
+                </div>
+                <div className="bottom-spacer"></div>
+            </div>
+        )} />
+        <Route exact path="/rare" render={(props) => (
+            <div className="main-wrap">
+                <div className="top-spacer"></div>
+                <div className="mid-section">
+                    <div className="left-main">
+                        <PostList subscribed {...props} />
+                    </div>
+                </div>
+                <div className="bottom-spacer"></div>
+            </div>
+        )} />
+
+        <Route exact path="/posts/mine" render={(props) => (
+            <div className="main-wrap">
+                <div className="top-spacer"></div>
+                <div className="mid-section">
+                    <div className="left-main">
+                        <PostList myPosts {...props} />
+                    </div>
+                </div>
+                <div className="bottom-spacer"></div>
+            </div>
+        )} />
+        </>
+        </ReactionProvider>
+        </PostProvider>
+        </TagProvider>
+        </PostTagProvider>
         </CategoryProvider>
     )
 }

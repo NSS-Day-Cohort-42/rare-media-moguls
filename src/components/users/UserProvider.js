@@ -4,7 +4,7 @@ export const UserContext = React.createContext()
 
 export const UserProvider = (props) => {
     const [users, setUsers] = useState([])
-    const [currentUser, setCurrentUser] = useState({subscriptions:{}, posts:{}, subscribers:{}})
+    const [currentUser, setCurrentUser] = useState({posts:{}, images:{}})
     const [loggedIn, setLoggedIn] = useState(false)
     const [currentUserProfile, setCurrentUserProfile] = useState({subscriptions:{}, posts:{}, subscribers:{}})
     const [currentUserSubscriptions, setCurrentUserSubscriptions] = useState([])

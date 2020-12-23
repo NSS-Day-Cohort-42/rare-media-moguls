@@ -17,7 +17,6 @@ export default (props) => {
     const handleDelete = (p) => {
         deletePost(p.id).then(()=> props.history.push("/rare"))
     }
-
     return (
         <>
         <dialog className="dialog dialog--deletePost" ref={deletePostDialog}>
