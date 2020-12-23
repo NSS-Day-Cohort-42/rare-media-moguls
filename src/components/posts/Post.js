@@ -1,80 +1,89 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { ReactionContext } from '../reactions/ReactionProvider';
-import { UserContext } from '../users/UserProvider';
+import { PostCategory } from './PostCategory'
+import { PostImage } from './PostImage'
+import { PostTitle } from './PostTitle'
+import { EditDeletePostButton } from './EditPostButton'
+import { AdminPostApproval } from './AdminPostApproval'
+import { PostAuthor } from './PostAuthor'
+import { PostContext } from './PostProvider'
+import PostPublicationDate from './PostPublicationDate'
 import "./Post.css";
-import { PostContext } from './PostProvider';
 
-
-export const Post = (props) => {
-    const {deletePost} = useContext(PostContext)
-    const{getCurrentUser, currentUser} = useContext(UserContext)
+export default (props) => {
+    const { deletePost } = useContext(PostContext)
     const deletePostDialog = useRef(null)
-    const [admin, setAdmin] = useState(false)
-    const [author, setPostAuthor] = useState()
 
-    useEffect(() => {
-        getCurrentUser()
-    }, [])
-
-
-    const editDeleteButtons = () => {
-        if (currentUser.id === props.post.rareuser.id) {
-            return (
-                <div className="postButtonContainer">
-                    <button
-                        className="btn-small fa fa-edit"
-                        onClick={() => {
-                            props.history.push(`/posts/edit/${props.post.id}`)
-                        }}></button>
-                    <button
-                        className="btn-small fa fa-trash"
-                        onClick={() => {
-                            deletePostDialog.current.showModal()
-                        }}></button>
-                </div>
-            )
-        }
+    const handleDelete = (p) => {
+        deletePost(p.id).then(()=> props.history.push("/rare"))
     }
 
     return (
         <>
-            <div className="post-item">
-                <div className="upperhalf">
-                    <dialog className="dialog dialog--deletePost" ref={deletePostDialog}>
-                        <div>Are you sure you want to delete this post?</div>
-                        <button className="button--closeDialog btn" onClick={e => deletePostDialog.current.close()}>Close</button>
-                        <button className="button--deleteDialog btn"
-                            onClick={e => {
-                                deletePost(props.post.id)
-                                .then(deletePostDialog.current.close())
-                                .then(window.location.reload(false))
-                            }}>Delete Post</button>
-                    </dialog>
-                    <div className="post-title-cont">
-                        <span className="post-title" onClick={() => {
-                            props.history.push(`/posts/${props.post.id}`)
-                        }}>
-                            {props.post.title}
-                        </span>
+        <dialog className="dialog dialog--deletePost" ref={deletePostDialog}>
+            <div>
+                Are you sure you want to delete this post?
+            </div>
+            <button className="button--closeDialog btn" onClick={() => deletePostDialog.current.close()}>
+                Close
+            </button>
+            <button className="button--deleteDialog btn" onClick={() => handleDelete(props.post)}>
+                Delete Post
+            </button>
+        </dialog>
+        <section className="post">
+            <div className="manage-buttons top-align">
+                <EditDeletePostButton
+                post={props.post}
+                admin={props.admin}
+                is_author={props.is_author}
+                edit
+                {...props}/>
+
+                <EditDeletePostButton
+                post={props.post}
+                admin={props.admin}
+                is_author={props.is_author}
+                {...props}/>
+            </div>
+            <div className="post-list-single">
+                <div className="post-list-top">
+                    <div className="post-title-wrapper">
+                        <PostTitle
+                        post={props.post}
+                        {...props} />
                     </div>
-                    <div className="postDate">
-                        {props.post.publication_date != null ?
-                            new Date(props.post.publication_date.concat("T00:00:00")).toDateString({}) : "unpublished"}
+                    <div className="post-date-wrapper">
+                        <PostPublicationDate
+                        is_author={props.is_author}
+                        post={props.post}
+                        {...props}/>
                     </div>
                 </div>
                 <div className="middle">
-                {props.post.image_url ?
-                            <div className="divImg-postList">
-                                <img className="img-postList" src={props.post.image_url}></img>
-                            </div>
-                            :null
-                 }
-                 </div>
+                    <PostImage
+                    post={props.post}
+                    {...props}/>
+                </div>
                 <div className="lowerhalf">
-                     <div>Author: {props.post.rareuser.username}</div>
-                {editDeleteButtons()}
+                    <div className="lower-left-post">
+                        <PostAuthor
+                        author={props.post.rareuser}
+                        {...props}/>
+                        <PostCategory
+                        category={props.post.category}
+                        {...props}/>
+                    </div>
+                    <div className="lower-right-post">
+                        <AdminPostApproval
+                        admin={props.admin}
+                        checked={props.post.approved}
+                        post={props.post}
+                        {...props}/>
+                    </div>
                 </div>
             </div>
+        </section>
         </>
     )
 }

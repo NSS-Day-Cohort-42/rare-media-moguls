@@ -1,37 +1,37 @@
-// Subscribe button only renders if the profile does not belong to the current user
 import React, { useContext, useEffect, useState } from "react"
-import "./User.css"
 import { SubscriptionContext } from './SubscriptionProvider'
+import "./User.css"
 
 export const SubscribeButton = (props) => {
-    const { subscriptions, singleSubscription, createSubscription, getAuthorSubscriptionByUser, unsubscribe } = useContext(SubscriptionContext)
+    const { manageSubscription, checkIfSubscriptionExists } = useContext(SubscriptionContext)
+    const [subscribed, setSubscribed] = useState(null)
 
-    useEffect(() => {
-        const authorId = props.profile.id
-        if(props.profile.id) {
-            getAuthorSubscriptionByUser(authorId)
-        }
-    }, [props.profile.id])
+    useEffect(()=>{
+        checkIfSubscriptionExists(props.author_id).then(res=>{
+            if(res && res.ended_on !== null){
+                setSubscribed(false)
+            }
+            else{
+                setSubscribed(true)
+        }})
+    }, [])
+
+    const handleClick = () => {
+        manageSubscription(props.author_id).then((res)=> {
+            if(res.message == 'unsubscribed'){
+                setSubscribed(false)
+            }
+            else if(res.message == 'subscribed'){
+                setSubscribed(true)
+            }
+        })
+    }
 
     const CurrentUserCheck = () => {
-        if(!props.profile.is_current_user){
+        if(props.currentUser && props.currentUser.id !== props.author_id){
             return (
-                <button className="subscribe btn" onClick={()=>{
-                    const authorId = props.profile.id
-                    if(singleSubscription.hasOwnProperty('message')) {
-                        createSubscription({"author_id": authorId})
-                            .then(() => 
-                            getAuthorSubscriptionByUser(props.profile.id))
-                    } else {
-                        unsubscribe(singleSubscription.id)
-                            .then(() => 
-                            getAuthorSubscriptionByUser(props.profile.id))
-                    }
-                }}>
-                    {singleSubscription.hasOwnProperty('message') ?
-                    "Subscribe"
-                    :
-                    "Unsubscribe"}
+                <button className="subscribe btn" onClick={handleClick}>
+                    {subscribed ? "Unsubscribe" : "Subscribe"}
                 </button>
             )
         }
@@ -42,7 +42,7 @@ export const SubscribeButton = (props) => {
 
     return (
         <>
-        <CurrentUserCheck />
+            <CurrentUserCheck />
         </>
     )
 }

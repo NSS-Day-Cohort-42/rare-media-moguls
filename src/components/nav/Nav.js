@@ -7,6 +7,7 @@ export const Nav = (props) => {
     const [loggedIn, setLoggedIn] = useState(false)
     const [admin, setAdmin] = useState(false)
     const {currentUser, getCurrentUser} = useContext(UserContext)
+    const [pathname, setPathname] = useState("")
 
     useEffect(()=>{
         getCurrentUser()
@@ -54,7 +55,7 @@ export const Nav = (props) => {
                         <div className={`${admin ? "admin-nav-link-wrap": "nav__link-wrapper"}`}>
                             <button
                             title="View All Posts"
-                            className="btn nav__btn"
+                            className="btn nav__btn all-posts"
                             onClick={()=>props.history.push(`${loggedIn ? '/posts' : '/login'}`)}>
                                 All Posts
                             </button>
@@ -63,7 +64,7 @@ export const Nav = (props) => {
                             ?<>
                                 <button
                                 title="Review My Posts"
-                                className="btn nav__btn"
+                                className="btn nav__btn my-posts"
                                 onClick={()=>props.history.push(`/users/posts`)}>
                                     My Posts
                                 </button>

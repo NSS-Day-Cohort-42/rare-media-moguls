@@ -96,7 +96,10 @@
     justify-content: space-evenly;
     min-width: 800px;
 }
-
+.all-posts,
+.my-posts {
+    min-width: 100px;
+}
 .nav__btn {
     display: flex;
     align-content: center;

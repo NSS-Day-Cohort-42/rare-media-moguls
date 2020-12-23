@@ -11,12 +11,6 @@ import { UserContext } from "./users/UserProvider"
 
 
 export const ApplicationViews = (props) => {
-    const { getCurrentUser, getCurrentUserSubscriptions } = useContext(UserContext)
-
-    useEffect(()=>{
-        getCurrentUser()
-        getCurrentUserSubscriptions()
-    }, [])
 
     return (
         <>

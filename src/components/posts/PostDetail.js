@@ -1,114 +1,100 @@
 import React, { useContext, useEffect, useState, useRef } from "react"
 import { PostContext } from "./PostProvider"
+import { EditDeletePostButton } from "./EditPostButton"
 import { ReactionContext } from "../reactions/ReactionProvider"
 import "./Post.css"
 import { PostTags } from "../PostTags/PostTags"
 import { Link } from "react-router-dom"
 import { UserContext } from "../users/UserProvider"
+import Reactions from "./Reaction"
 
 
 export const PostDetails = (props) => {
     const { getPostById, deletePost, publishPost, post } = useContext(PostContext)
     const { reactions, getReactionsByPost, addReaction } = useContext(ReactionContext)
-    const { currentUser, getCurrentUser } = useContext(UserContext)
-
+    const { currentUser } = useContext(UserContext)
 
     const deletePostDialog = useRef(null)
-
     useEffect(() => {
         const postId = parseInt(props.match.params.postId)
         getReactionsByPost(postId)
         getPostById(postId)
     }, [])
 
-    useEffect(() => {
-        getCurrentUser()
-    }, [])
+    const handleReact = (r) => {
+        const postIdObj = { post_id: post.id }
+        addReaction(r.id, postIdObj).then(() => getReactionsByPost(post.id))
+    }
 
+    const handleDelete = (p) => {
+        deletePost(p.id).then(()=> props.history.push("/rare"))
+    }
 
-    const editDeleteButtons = () => {
-        if (post.is_user_author) {
-            return (
-                <div className="postButtonContainer">
-                    <button
-                        className="btn-small fa fa-edit"
-                        onClick={() => {
-                            props.history.push(`/posts/edit/${post.id}`)
-                        }}></button>
-                    <button
-                        className="btn-small fa fa-trash"
-                        onClick={() => {
-                            deletePostDialog.current.showModal()
-                        }}></button>
-                    <button
-                        className="btn-small publishBtn"
-                        onClick={() => {
-                            publishPost(post.id)
-                                .then(() => getPostById(post.id))
-                        }}>{post.publication_date == null ? "Publish" : "Unpublish"}</button>
-
-                </div>
-            )
-        } else if (currentUser.is_staff === true) {
-            return (<div className="postButtonContainer">
-                <button
-                    className="btn-small fa fa-trash"
-                    onClick={() => {
-                        deletePostDialog.current.showModal()
-                    }}></button>
-            </div>
-            )
-        }
+    const handleClick = () => {
+        deletePostDialog.current.showModal()
     }
 
     return (
         <>
             <dialog className="dialog dialog--deletePost" ref={deletePostDialog}>
-                <div>Are you sure you want to delete this post?</div>
-                <button className="button--closeDialog btn" onClick={e => deletePostDialog.current.close()}>Close</button>
-                <button className="button--deleteDialog btn"
-                    onClick={e => {
-                        deletePost(post.id)
-                        props.history.push("/rare")
-                    }}>Delete Post</button>
+                <div>
+                    Are you sure you want to delete this post?
+                </div>
+                <button className="button--closeDialog btn" onClick={() => deletePostDialog.current.close()}>
+                    Close
+                </button>
+                <button className="button--deleteDialog btn" onClick={() => handleDelete(post)}>
+                    Delete Post
+                </button>
             </dialog>
+
             <div className="postFlex">
-                <div className="flexLeftSpace"></div>
+                <div className="manage-buttons">
+                    <EditDeletePostButton
+                    admin={currentUser.is_staff}
+                    is_author={currentUser.id === post.rareuser.id}
+                    post={post}
+                    edit
+                    {...props}/>
+                    <EditDeletePostButton
+                    admin={currentUser.is_staff}
+                    is_author={currentUser.id === post.rareuser.id}
+                    post={post}
+                    handleClick={handleClick}
+                    delete
+                    {...props}/>
+                </div>
                 <div className="postDetailContainer">
                     <div className="postTitleContainer">
-                        {editDeleteButtons()}
                         <h2 className="postTitle">{post.title}</h2>
                         <p>{post.category.label}</p>
 
                     </div>
-                    {post.image_url ?
+                    {post.image_url
+                        ?
                         <div className="img-div">
-                            <img className="post-img" src={post.image_url}></img>
+                            <img className="post-img" src={post.image_url} />
                         </div>
                         :null
                     }
                     <div className="author_date_container">
-                        <h3 className="authorName"><Link className="postLink" to={ `/users/${post.rareuser.id}` }>by {post.rareuser.username} </Link></h3>
-                        <button
-                            className="btn postEditBtn"
-                            onClick={() => {
-                                props.history.push(`/comments/${post.id}`)
-                            }}>View Comments</button>
+                        <p className="authorName">
+                            <Link className="postLink" to={ `/users/${post.rareuser.id}` }>
+                                by {post.author_username}
+                            </Link>
+                        </p>
+                        <div className="btn view-comments-btn" onClick={() => props.history.push(`/comments/${post.id}`)}>
+                            View Comments
+                        </div>
 
                         <div className='reactionContainer'>
-                            {reactions.map(r =>
-                                <>
-                                    <img className="reaction-img" src={r.image_url} width="30" height="30"
-                                        onClick={() => {
-                                            const postIdObj = { post_id: post.id }
-                                            addReaction(r.id, postIdObj)
-                                                .then(() => {
-                                                    getReactionsByPost(post.id)
-                                                })
-                                        }}></img>
-                                    <p>{r.count}</p>
-                                </>)}
-
+                            {reactions.map(r => {
+                                return <Reactions {...props}
+                                key={r.id}
+                                reaction={r}
+                                handleReact={handleReact}
+                                />
+                            })}
                         </div>
                     </div>
                     <div className="postContent">
@@ -116,7 +102,10 @@ export const PostDetails = (props) => {
                     </div>
                 </div>
                 <div className="postTagContainer">
-                    <PostTags postId={post.id} isUserAuthor={post.is_user_author} />
+                    <PostTags
+                    {...props}
+                    postId={post.id}
+                    isUserAuthor={post.is_user_author} />
                 </div>
 
             </div>

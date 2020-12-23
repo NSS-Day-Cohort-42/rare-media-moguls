@@ -54,7 +54,7 @@ export const Login = (props) => {
                             type="text"
                             id="username"
                             className="form-control username-login"
-                            defaultValue="marymogul"
+                            defaultValue="sortinghat"
                             placeholder="Username"
                             required
                             autoComplete="off"
@@ -66,7 +66,7 @@ export const Login = (props) => {
                             className="form-control pw-login"
                             autoComplete="off"
                             spellCheck="off"
-                            defaultValue="me"
+                            defaultValue="pw"
                             placeholder="Password"
                             required />
                     </div>

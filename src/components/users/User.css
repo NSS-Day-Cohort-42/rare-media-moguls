@@ -39,6 +39,8 @@ td {
     z-index: 5;
     height: 150px;
     width: 150px;
+    object-fit: cover;
+    object-position: center;
     border: solid 1px black;
     margin: -.25rem;
 }
@@ -135,10 +137,13 @@ td {
 .subscribe {
     text-align: center;
     position: absolute;
-    transform: translateX(600%);
-    max-width: 110px;
+    right: 30%;
+    max-width: 130px;
     border-radius: .35rem;
     background-color: rgb(228, 228, 228);
     color: black;
     border: 1px solid black;
+}
+.clickable-author-user{
+    cursor: pointer;
 }

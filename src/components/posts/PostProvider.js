@@ -3,13 +3,15 @@ import React, { useState } from "react"
 export const PostContext = React.createContext()
 
 export const PostProvider = (props) => {
+    const api = 'http://localhost:8000/posts'
+    const token = localStorage.getItem('rare_token')
     const [posts, setPosts] = useState([])
     const [post, setCurrentPost] = useState({rareuser:{}, category:{}})
 
     const getPosts = () => {
-        return fetch("http://localhost:8000/posts", {
+        return fetch(`${api}`, {
             headers: {
-                "Authorization": `Token ${localStorage.getItem("rare_token")}`,
+                "Authorization": `Token ${token}`,
                 "Content-Type": "application/json"
             }
         })
@@ -17,10 +19,10 @@ export const PostProvider = (props) => {
             .then(setPosts)
     }
 
-    const getPostById = (id) => {
-        return fetch(`http://localhost:8000/posts/${id}`, {
+    const getPostById = (postId) => {
+        return fetch(`${api}/${postId}`, {
             headers: {
-                "Authorization": `Token ${localStorage.getItem("rare_token")}`,
+                "Authorization": `Token ${token}`,
                 "Content-Type": "application/json"
             }
         })
@@ -28,12 +30,11 @@ export const PostProvider = (props) => {
             .then(setCurrentPost)
     }
 
-
     const addPost = post => {
-        return fetch("http://localhost:8000/posts", {
+        return fetch(`${api}`, {
             method: "POST",
             headers: {
-                "Authorization": `Token ${localStorage.getItem("rare_token")}`,
+                "Authorization": `Token ${token}`,
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(post)
@@ -45,83 +46,92 @@ export const PostProvider = (props) => {
     }
 
     const deletePost = postId => {
-        return fetch(`http://localhost:8000/posts/${postId}`, {
+        return fetch(`${api}/${postId}`, {
             method: "DELETE",
-            headers: {"Authorization": `Token ${localStorage.getItem("rare_token")}`},
+            headers: {"Authorization": `Token ${token}`},
         })
-            .then(getPosts)
-    }
-
-    const getPostsByCategoryId = category_id => {
-        return fetch(`http://localhost:8000/posts?category_id=${category_id}`, {
-            headers: {
-                "Authorization": `Token ${localStorage.getItem("rare_token")}`,
-                "Content-Type": "application/json"
-            }
-        })
-            .then(res => res.json())
-            .then(setPosts);
-    };
-
-    const updatePost = post => {
-        return fetch(`http://localhost:8000/posts/${post.id}`, {
-            method: "PUT",
-            headers: {
-                "Authorization": `Token ${localStorage.getItem("rare_token")}`,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(post)
-        })
-            .then(getPosts)
-
-    }
-
-    const getPostsByUser = () => {
-        return fetch(`http://localhost:8000/users/posts`, {
-            headers: {
-                "Authorization": `Token ${localStorage.getItem("rare_token")}`
-            }
-        })
-            .then(res => res.json())
-    }
-
-    const adminPostApproval = (post) => {
-        return fetch(`http://localhost:8000/posts/${ post.id }/approval`, {
-            method: "PUT",
-            headers:{
-                "Authorization": `Token ${localStorage.getItem("rare_token")}`,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(post)
-        })
-            .then(getPosts)
-
-    }
-
-    const publishPost = (postId) => {
-        return fetch(`http://localhost:8000/posts/${ postId }/publish`, {
-            method: "PATCH",
-            headers:{
-                "Authorization": `Token ${localStorage.getItem("rare_token")}`,
-                "Content-Type": "application/json"
-            }
-        })
-            .then(getPosts)
+        .then(getPosts)
     }
 
     const getPostsByAuthor = (userId) => {
-        return fetch(`http://localhost:8000/posts?rareuser_id=${userId}`, {
+        return fetch(`${api}?rareuser_id=${userId}`, {
             headers: {
-                "Authorization": `Token ${localStorage.getItem("rare_token")}`
+                "Authorization": `Token ${token}`
             }
         })
-            .then(res => res.json())
+        .then(res => res.json())
     }
+
+    const getPostsByCategory = category_id => {
+        return fetch(`${api}?category_id=${category_id}`, {
+        headers: {
+            "Authorization": `Token ${token}`,
+            "Content-Type": "application/json"
+        }
+    })
+        .then(res => res.json())
+    }
+
+    const updatePost = post => {
+        return fetch(`${api}/${post.id}`, {
+            method: "PUT",
+            headers: {
+                "Authorization": `Token ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(post)
+        })
+            .then(getPosts)
+    }
+
+    const adminPostApproval = (postId) => {
+        return fetch(`${api}/${ postId }/approval`, {
+            method: "PATCH",
+            headers:{
+                "Authorization": `Token ${token}`,
+                "Content-Type": "application/json"
+            }
+        })
+            .then(getPosts)
+    }
+
+    const publishPost = (postId) => {
+        return fetch(`${api}/${ postId }/publish`, {
+            method: "PATCH",
+            headers:{
+                "Authorization": `Token ${token}`,
+                "Content-Type": "application/json"
+            }
+        })
+            .then(getPosts)
+    }
+
+    const getSubscribedPosts = userId => {
+        return fetch(`${api}?subscribed=${userId}`, {
+        headers: {
+            "Authorization": `Token ${token}`,
+            "Content-Type": "application/json"
+        }
+    })
+        .then(res => res.json())
+    }
+
 
     return (
         <PostContext.Provider value={{
-            posts, addPost, getPostById, deletePost, updatePost, getPosts,
-            getPostsByCategoryId, getPostsByUser, adminPostApproval, publishPost, post, getPostsByAuthor, setPosts
+            posts,
+            addPost,
+            getPostById,
+            deletePost,
+            updatePost,
+            getPosts,
+            getPostsByCategory,
+            adminPostApproval,
+            publishPost,
+            post,
+            getSubscribedPosts,
+            getPostsByAuthor,
+            setPosts
         }}>
             {props.children}
         </PostContext.Provider>

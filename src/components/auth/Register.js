@@ -1,10 +1,13 @@
-import React, { useRef, useState } from "react"
+import React, { useRef, useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import "./Auth.css"
 
 export const Register = (props) => {
 
     const [profileImg, setProfileImg] = useState('')
+    const [image, setImage] = useState('')
+    const [imageId, setImageId] = useState('')
+    const [loading, setLoading] = useState(false)
 
     const first_name = useRef()
     const last_name = useRef()
@@ -15,29 +18,68 @@ export const Register = (props) => {
     const verifyPassword = useRef()
     const passwordDialog = useRef()
 
+    const imageUpload = (url, data) => {
+        const image = {
+            "image": data,
+            "profile": ''
+        }
+        return fetch(url, {
+            method: 'POST',
+            headers: {
+                "Authorization": `Token fa2eba9be8282d595c997ee5cd49f2ed31f65bed`,
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(image)
+        }).then(res => res.json()).then(res=>{
+            setImage(res.image)
+            setImageId(res.id)
+        }).then(()=>{
+            setLoading(false)
+        })
+    }
+
     const getBase64 = (file, callback) => {
         const reader = new FileReader();
         reader.addEventListener('load', () => callback(reader.result));
         reader.readAsDataURL(file);
-        console.log(reader, "READER")
-        console.log(file, "FILE")
     }
 
-    const createProfileImageJSON = (event) => {
-        getBase64(event.target.files[0], (base64ImageString) => {
+    const createProfileImageJSON = (e) => {
+        getBase64(e.target.files[0], (base64ImageString) => {
             setProfileImg(base64ImageString)
         });
     }
 
+    const patchImage = (token) => {
+        const imgId = imageId
+        const url = `http://localhost:8000/profileimages/${imgId}/savetoprofile`;
+
+        return fetch(`${url}`, {
+            method: "PATCH",
+            headers: {
+                "Authorization": `Token ${token}`,
+                "Content-Type": "application/json"
+            }
+        }).then(res => res.json())
+
+    }
+    useEffect(()=>{
+        if(profileImg !== ''){
+            setLoading(true)
+            const url = "http://localhost:8000/profileimages"
+            const data = profileImg
+            imageUpload(url, data)
+        }
+    },[profileImg])
+
     const handleRegister = (e) => {
         e.preventDefault()
-
         if (password.current.value === verifyPassword.current.value) {
             const newUser = {
                 "first_name": first_name.current.value,
                 "last_name": last_name.current.value,
                 "username": username.current.value,
-                "profile_image_url": profileImg,
                 "email": email.current.value,
                 "password": password.current.value,
                 "bio": bio.current.value,
@@ -45,6 +87,7 @@ export const Register = (props) => {
             return fetch("http://localhost:8000/register", {
                 method: "POST",
                 headers: {
+                    "Authorization": `Token ${localStorage.getItem("rare_token")}`,
                     "Content-Type": "application/json",
                     "Accept": "application/json"
                 },
@@ -53,8 +96,10 @@ export const Register = (props) => {
                 .then(res => {
                     return res.json()})
                 .then(res => {
-                        localStorage.setItem("rare_token", res.token)
+                    localStorage.setItem("rare_token", res.token)
+                    patchImage(res.token).then(()=>{
                         props.history.push("/rare")
+                    })
                 })
         } else {
             passwordDialog.current.showModal()
@@ -84,7 +129,7 @@ export const Register = (props) => {
                         <input ref={password} type="password" name="password" className="form-control pw-register" placeholder="Password" autoComplete="off" spellCheck="off" />
                         <input ref={verifyPassword} type="password" name="verifyPassword" className="form-control pw-verify" placeholder="Verify password" autoComplete="off" spellCheck="off" />
                         <textarea ref={bio} name="bio" className="form-control bio" placeholder="Bio" />
-                        <input className="register-input" type="file" id="profile_image" onChange={(evt) => {createProfileImageJSON(evt)}}/>
+                        <input className="register-input" type="file" id="profile_image" onChange={(e) => {createProfileImageJSON(e)}}/>
 
                         <button className="btn login-button" type="submit">Register</button>
                         <section className="link--register">
@@ -94,6 +139,12 @@ export const Register = (props) => {
                 </div>
 
             </form>
+            {loading
+            ? <h3 className="h3 h3--img-load">Loading...</h3>
+            : <div className="upload--img">
+                <img src={image} alt="" className="img-uploaded" />
+            </div>
+            }
         </main>
     )
 }

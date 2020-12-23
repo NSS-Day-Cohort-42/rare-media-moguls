@@ -4,7 +4,7 @@ import {PostTagContext} from "../PostTags/PostTagProvider"
 export const TagBoxes = (props) => {
     const [checked, setChecked] = useState(false)
     const { removePostTag, addPostTag, postTags, getPostTagsByPost } = useContext(PostTagContext)
- 
+
     const tag = props.tag
     const selectedTags = props.selectedTags
 
@@ -51,9 +51,9 @@ export const TagBoxes = (props) => {
     }
 
     return (
-        <div className="tag-container" id={tag.id}>
+        <div className="tag-container tag-on-post" id={tag.id}>
             <label>
-                <input type="checkbox" id="tag" checked={checked} onChange={checkboxHandler}></input>
+                <input className="checkbox-tag" type="checkbox" id="tag" checked={checked} onChange={checkboxHandler}></input>
                 {tag.label}
             </label>
         </div>

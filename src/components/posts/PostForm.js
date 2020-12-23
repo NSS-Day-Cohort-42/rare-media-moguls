@@ -12,9 +12,9 @@ export const PostForm = (props) => {
     const [selectedTags, setTags] = useState([])
     const [post, setPost] = useState({rareuser: {}, category: {}})
     const [base64, setBase64] = useState(null)
-    
+
     const editMode = props.match.params.hasOwnProperty("postId")
-    
+
     const handleControlledInputChange = (eve) => {
         const newPost = Object.assign({}, post)
         newPost[eve.target.name] = eve.target.value
@@ -44,7 +44,7 @@ export const PostForm = (props) => {
         reader.addEventListener('load', () => callback(reader.result));
         reader.readAsDataURL(file);
     }
-    
+
     const createPostImageJSON = (event) => {
         getBase64(event.target.files[0], (base64ImageString) => {
             console.log("Base64 of file is", base64ImageString);
@@ -88,33 +88,23 @@ export const PostForm = (props) => {
     return (
 
         <form className="form new_post_form" id="postForm">
-            <h2 className="postForm_title">{editMode ? "Update Post" : "Create a New Post"}</h2>
-            <fieldset>
+            <p className="postForm_title">{editMode ? "Update Post" : "Create a New Post"}</p>
                 <div className="form-div">
-                    <label htmlFor="title">Post Title: </label>
                     <input type="text" name="title" required className="form-control" id="title"
-                        proptype="varchar"
-                        placeholder="title"
+                        placeholder="Post Title"
                         defaultValue={post.title}
                         onChange={handleControlledInputChange}>
                     </input>
                 </div>
-            </fieldset>
-            <fieldset>
                 {editMode && post.image_url != null ? <img className="formImage" src={post.image_url}></img> : null}
                 <div className="header-image-div">
-                    <label htmlFor="profile_img">Select a header image for this post</label>
                     <input type="file" id="profle_image" name="profile_img"
                         onChange={(evt) => {
                             createPostImageJSON(evt)
                     }} />
                 </div>
-            </fieldset>
-            <fieldset>
                 <div className="form-div">
-                    <label htmlFor="category_id">Post Category: </label>
                         <select name="category_id" className="form-control" id="post"
-                            proptype=""
                             value={post.category_id}
                             onChange={handleControlledInputChange}>
                             <option value="0">Choose a category...</option>
@@ -125,19 +115,13 @@ export const PostForm = (props) => {
                             ))}
                         </select>
                 </div>
-            </fieldset>
-            <fieldset>
                 <div className="form-div">
-                    <label htmlFor="content">Post: </label>
                     <textarea type="text" name="content" required className="form-control" id="content"
-                        proptype="varchar"
-                        placeholder="post content"
+                        placeholder="Post content..."
                         defaultValue={post.content}
                         onChange={handleControlledInputChange}>
                     </textarea>
                 </div>
-            </fieldset>
-
             <div className="tag-container">
                 {
                     tags.map(t => <TagBoxes tag={t} selectedTags={selectedTags} setTags={setTags}  post={post} editMode={editMode} {...props} />)

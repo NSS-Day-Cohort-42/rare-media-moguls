@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Route } from "react-router-dom";
 import { CategoryProvider } from "../categories/CategoryProvider";
 import { PostTagProvider } from "../PostTags/PostTagProvider";
@@ -10,8 +10,11 @@ import { PostList } from "../posts/PostList";
 import { UserPostList } from "../posts/UserPostList"
 import { ReactionProvider } from "../reactions/ReactionProvider"
 import { SubscribedPostList } from "../posts/SubscribedPostList"
+import { UserContext } from "../users/UserProvider"
 
 export default () => {
+    const { currentUser } = useContext(UserContext)
+
     return (
         <CategoryProvider>
             <PostTagProvider>
@@ -49,8 +52,7 @@ export default () => {
                                     <div className="main-wrap">
                                         <div className="top-spacer"></div>
                                         <div className="mid-section">
-                                            <UserPostList
-                                                {...props} />
+                                            <UserPostList myPosts {...props} />
                                         </div>
                                         <div className="bottom-spacer"></div>
                                     </div>
@@ -60,7 +62,7 @@ export default () => {
                                         <div className="top-spacer"></div>
                                         <div className="mid-section">
                                             <div className="left-main">
-                                                <SubscribedPostList subscribedPostList {...props} />
+                                                <PostList subscribedPostList {...props} />
                                             </div>
                                         </div>
                                         <div className="bottom-spacer"></div>
@@ -71,8 +73,7 @@ export default () => {
                                     <div className="main-wrap">
                                         <div className="top-spacer"></div>
                                         <div className="mid-section">
-                                            <UserPostList
-                                                {...props} />
+                                            <UserPostList  {...props} />
                                         </div>
                                         <div className="bottom-spacer"></div>
                                     </div>

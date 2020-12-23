@@ -23,13 +23,21 @@ export const Category = (props) => {
         props.setEditMode(false)
         props.setCurrentCategory({})
     }
+
+    const handleClick = (e) =>{
+        props.history.push(`/posts/category/${e.id}`)
+    }
     return (
         <>
             <section className="category">
-                <EditCategoryButton currentUser={currentUser} category={props.category} handleEditButtonClick={handleEditButtonClick} {...props} />
+                <EditCategoryButton
+                currentUser={currentUser}
+                category={props.category} handleEditButtonClick={handleEditButtonClick}
+                {...props} />
                 <DeleteCategoryButton currentUser={currentUser} category={props.category} handleDeleteButtonClick={handleDeleteButtonClick} {...props} />
                 <div className="category-label__container">
-                    <p className="category__label">
+                    <p className="category__label" onClick={()=>{
+                        handleClick(props.category)}}>
                         {props.category.label}
                     </p>
                 </div>

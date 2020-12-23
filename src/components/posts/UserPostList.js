@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react"
 import { PostContext } from "./PostProvider"
-import { Post } from "./Post"
+import Post from "./Post"
 import "./Post.css";
 import { UserContext } from "../users/UserProvider";
 
@@ -47,8 +47,10 @@ export const UserPostList = (props) => {
     return (
         <>
             <div className="mainPostContainer">
-                <div className="my-posts-heading">{seeAllPostsByAuthor ? `${props.location.state.name}'s Posts` : "My Posts"}</div>
-                {seeAllPostsByAuthor ? 
+                <div className="my-posts-heading" style={{cursor: "pointer"}} onClick={()=>{
+                                props.history.push(`/users/${props.p.rareuser.id}`)
+                            }}>{seeAllPostsByAuthor ? `${props.location.state.name}'s Posts` : "My Posts"}</div>
+                {seeAllPostsByAuthor ?
                     parseInt(props.location.state.userId) === currentUser.id ?
                         <button className="btn newPostbtn"
                             onClick={() => {
@@ -65,7 +67,7 @@ export const UserPostList = (props) => {
                             }}>
                             Create New Post
                 </button>
-                    
+
                 }
                 {posts !== []
                     ? posts.map(p => {

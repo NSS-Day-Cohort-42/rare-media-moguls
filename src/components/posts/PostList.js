@@ -1,91 +1,59 @@
+// All posts view shows all published posts
 import React, { useContext, useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { PostContext } from "./PostProvider"
 import "./Post.css";
 import {AdminPostApproval} from "./AdminPostApproval"
 import { UserContext } from "../users/UserProvider";
+import { CreatePostButton } from "./CreatePostButton"
+import Post from "./Post"
 
 
 export const PostList = (props) => {
-    const {posts, getPosts, getPostsByCategoryId} = useContext(PostContext)
+// REFS
+// CONTEXT
+    const {posts, getPosts, getPostsByUser, getPostsByCategoryId} = useContext(PostContext)
     const {currentUser, getCurrentUser} = useContext(UserContext)
-    const [isCategory, setIsCategory] = useState(false)
+// STATE
+    const [filteredPosts, setFilteredPosts] = useState([])
+    const [currentUsersPosts, setCurrentUsers] = useState([])
+    const [authorsPosts, setAuthorsPosts] = useState([])
+    const [myPostsView, setMyPostsView] = useState(props.myPosts)
+    const [byCategory, setByCategory] = useState(props.byCategory)
+
 
     const approvedAndUserCreatedPosts = posts.filter(p => p.publication_date != null && p.approved || p.is_user_author )
-    const postsForAdmins = posts.filter(p => p.publication_date != null || p.is_user_author)
 
+    // const postsForAdmins = posts.filter(p => p.publication_date != null || p.is_user_author)
     useEffect(() => {
-        if(props.match.params.categoryId) {
-            setIsCategory(true)
-            const categoryId = parseInt(props.match.params.categoryId)
-            getPostsByCategoryId(categoryId)
-        }else {
-            getPosts()
-            getCurrentUser()
-        }
+        getPosts()
+        getCurrentUser()
     },[])
 
+    useEffect(()=>{
+        if(posts.length !== 0){
+            setFilteredPosts(posts)
+        }
+    }, [posts])
 
     return (
         <>
-        <h2 className="posts-site-title"></h2>
-                    <button
-                    className="btn newPostbtn"
-                    onClick={() => {
-                        props.history.push(`/new_post/`)
-                        window.location.reload()
-                    }}>Add Post +</button>
+        <CreatePostButton
+        {...props}/>
         <div className="mainPostContainer">
-            {
-                posts !== [] ?
-                    currentUser.is_staff === true ?
-                        postsForAdmins.map(p => { 
-                        return <div className="post-list-single" key={p.id}>
-                        <div className="post-list-top">
-                            <Link className="postLink" to={{pathname:`/posts/${p.id}`}}>
-                                <p className="post-title">{p.title}</p>
-                            </Link>
-                            <p style={{ marginLeft: '.5rem' }} className="publication-date">Publication Date 
-                             {p.publication_date ? new Date(p.publication_date).toDateString() : " unpublished"}</p>
-                        </div>
-                        {p.image_url ? 
-                            <div className="divImg-postList">
-                                <img className="img-postList" src={p.image_url}></img>
-                            </div>    
-                            :null
-                        }
-                        <div className="post-author">
-                            <p className="author-name"
-                            onClick={()=>{
-                                props.history.push(`/users/${p.rareuser.id}`)
-                            }}>
-                                {p.rareuser.full_name}
-                                </p>
-                        </div>
-                        <p>Posted in <Link to={{pathname:`/posts/category/${p.category.id}`}}><b>{p.category.label}</b></Link></p>
-                        <AdminPostApproval post = {p} isCategory = {isCategory} categoryId = {p.category.id}/>
-                        </div>
-                        })
-                    : approvedAndUserCreatedPosts.map(p=> {
-                        return <div key={p.id}>
-                        <div className="post-author">
-                            <p className="author-name"
-                                onClick={()=>{
-                                    props.history.push(`/users/${p.rareuser.id}`)
-                                }}>
-                                    {p.rareuser.full_name}
-                            </p>
-                            <p style={{ marginLeft: '.5rem' }} >• {p.publication_date ? new Date(p.publication_date).toDateString() : "unpublished"}</p>
-                        </div>
-                        <Link className="postLink" to={{pathname:`/posts/${p.id}`}}>
-                        <p>{p.title}</p>
-                        </Link>
-                        <p>Posted in <Link className="cat-link" to={{pathname:`/posts/category/${p.category.id}`}}><b>{p.category.label}</b></Link></p>
-                        </div>
-                    })
-                : null
+            {filteredPosts.map(p => {
+                return (
+                    <Post
+                    key={p.id}
+                    currentUser={currentUser}
+                    admin={currentUser.is_staff}
+                    is_author={currentUser.id === p.rareuser.id}
+                    post={p}
+                    {...props}/>
+                )
+            })
             }
-        </div>
-        </>
+            </div>
+            </>
     )
 }

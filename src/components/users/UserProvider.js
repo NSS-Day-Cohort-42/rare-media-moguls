@@ -3,11 +3,10 @@ import React, { useState } from "react"
 export const UserContext = React.createContext()
 
 export const UserProvider = (props) => {
-
     const [users, setUsers] = useState([])
-    const [currentUser, setCurrentUser] = useState({})
+    const [currentUser, setCurrentUser] = useState({subscriptions:{}, posts:{}, subscribers:{}})
     const [loggedIn, setLoggedIn] = useState(false)
-    const [currentUserProfile, setCurrentUserProfile] = useState({})
+    const [currentUserProfile, setCurrentUserProfile] = useState({subscriptions:{}, posts:{}, subscribers:{}})
     const [currentUserSubscriptions, setCurrentUserSubscriptions] = useState([])
     const [activeSubscriptions, setActiveSubscriptions] = useState([])
     const [followedAuthors, setFollowedAuthors] = useState([])
@@ -31,7 +30,6 @@ export const UserProvider = (props) => {
             }
         })
             .then(res => res.json())
-            .then(setCurrentUser)
     }
 
     const getUserProfile = (userId) => {
@@ -74,18 +72,20 @@ export const UserProvider = (props) => {
             }
         })
             .then(res => res.json())
-            .then(res => {
-                setCurrentUserSubscriptions(res)
-                const active = res.filter(r=>r.ended_on === null)
-                setActiveSubscriptions(active)
-                const authors = active.map(r=>r.author)
-                setFollowedAuthors(authors)
-            })
+    }
+
+    const getUserSubscriptions = (id) => {
+        return fetch(`http://localhost:8000/subscriptions?author_id=${id}`, {
+            headers: {
+                "Authorization": `Token ${localStorage.getItem("rare_token")}`
+            }
+        })
+            .then(res => res.json())
     }
 
     return (
         <UserContext.Provider value={{
-            users, getUsers, currentUser, getCurrentUser, changeUserType, changeUserActive, getUserProfile, loggedIn, setLoggedIn, setCurrentUser, currentUserProfile, setCurrentUserProfile, getCurrentUserSubscriptions, currentUserSubscriptions, setCurrentUserSubscriptions, setActiveSubscriptions, setFollowedAuthors, followedAuthors, activeSubscriptions
+            users, getUsers, currentUser, getCurrentUser, changeUserType, changeUserActive, getUserProfile, loggedIn, setLoggedIn, setCurrentUser, currentUserProfile, setCurrentUserProfile, getCurrentUserSubscriptions, currentUserSubscriptions, setCurrentUserSubscriptions, setActiveSubscriptions, setFollowedAuthors, followedAuthors, activeSubscriptions, getUserSubscriptions
         }}>
             {props.children}
         </UserContext.Provider>

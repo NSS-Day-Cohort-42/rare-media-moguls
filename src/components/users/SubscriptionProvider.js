@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 export const SubscriptionContext = React.createContext()
 
 export const SubscriptionProvider = (props) => {
-    const [subscriptions, setSubscriptions] = useState([])
-    const [singleSubscription, setSingleSubscription] = useState({})
+    const api = 'http://localhost:8000/subscriptions'
+    const token = localStorage.getItem("rare_token")
 
-    const getAllSubscriptionsByUser = () => {
-        return fetch("http://localhost:8000/subscriptions", {
+    const [subscriptions, setSubscriptions] = useState([])
+    const [subscription, setSubscription] = useState({})
+
+    const getAllSubscriptions = () => {
+        return fetch(`${api}`, {
             headers: {
-                "Authorization": `Token ${localStorage.getItem("rare_token")}`,
+                "Authorization": `Token ${token}`,
                 "Content-Type": "application/json"
             }
         })
@@ -16,57 +19,59 @@ export const SubscriptionProvider = (props) => {
             .then(setSubscriptions)
     }
 
-    const getAuthorSubscriptionByUser = (author) => {
-        return fetch(`http://localhost:8000/subscriptions/${author}/get_single_current_subscription`,
-        {
+    const checkIfSubscriptionExists = authorId => {
+        return fetch(`${api}?author=${authorId}`, {
             headers: {
-                "Authorization": `Token ${localStorage.getItem("rare_token")}`,
-                "Content-Type": "application/json",
+                "Authorization": `Token ${token}`,
+                "Content-Type": "application/json"
+            }
+        }).then(res => res.json())
+    }
+
+    const getAuthorsSubscribers = authorId => {
+        return fetch(`${api}?followers=${authorId}`, {
+            headers: {
+                "Authorization": `Token ${token}`,
+                "Content-Type": "application/json"
             }
         })
             .then(res => res.json())
-            .then(setSingleSubscription)
     }
 
-    const createSubscription = subscription => {
-        return fetch("http://localhost:8000/subscriptions", {
+    const createSubscription = sub => {
+        return fetch(`${api}`, {
             method: "POST",
             headers: {
-                "Authorization": `Token ${localStorage.getItem("rare_token")}`,
+                "Authorization": `Token ${token}`,
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(subscription)
+            body: JSON.stringify(sub)
         })
         .then(res => res.json())
-        .then(newsubscription => {
-            getAuthorSubscriptionByUser(newsubscription.author.id)
-                .then(console.warn(subscriptions))
-            return newsubscription.id })
+        .then(newSub => {
+            return newSub.author.id })
     }
 
-    const unsubscribe = (subscriptionId) => {
-        return fetch(`http://localhost:8000/subscriptions/${ subscriptionId }/unsubscribe`, {
+    const manageSubscription = (authorId) => {
+        return fetch(`${api}/${authorId}/manage`, {
             method: "PATCH",
             headers:{
-                "Authorization": `Token ${localStorage.getItem("rare_token")}`,
+                "Authorization": `Token ${token}`,
                 "Content-Type": "application/json"
             }
-        })
-            .then(() => {setSingleSubscription({})})
+        }).then(res => res.json())
     }
-
-useEffect(()=>{
-    getAllSubscriptionsByUser()
-}, [])
 
     return (
         <SubscriptionContext.Provider value={{
             subscriptions,
             createSubscription,
-            getAllSubscriptionsByUser,
-            getAuthorSubscriptionByUser,
-            unsubscribe,
-            singleSubscription
+            getAllSubscriptions,
+            manageSubscription,
+            checkIfSubscriptionExists,
+            getAuthorsSubscribers,
+            setSubscription,
+            subscription
         }}>
             {props.children}
         </SubscriptionContext.Provider>

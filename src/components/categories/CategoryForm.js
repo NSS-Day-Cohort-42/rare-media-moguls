@@ -9,6 +9,9 @@ export const CategoryForm = (props) => {
 
     const [isDisabled, setIsDisabled] = useState(true)
     const [category, setCategory] = useState({})
+    useEffect(() => {
+        getCurrentUser()
+    }, [])
 
     const handleControlledInputChange = (e) => {
         const inputVal = e.target.value
@@ -23,17 +26,12 @@ export const CategoryForm = (props) => {
         setCategory(newCategory)
     }
 
-    useEffect(() => {
-        getCurrentUser()
-    }, [])
-
-
     const constructNewCategory = () => {
         const label = category.label
-        const category = {
+        const newCategoryObject = {
             label: label
         }
-        addCategory(category)
+        addCategory(newCategoryObject)
             .then(() => {
                 const newCategory = {}
                 setCategory(newCategory)
